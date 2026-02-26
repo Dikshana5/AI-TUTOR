@@ -1,0 +1,41 @@
+# Core Dependencies
+fastapi
+uvicorn[standard]
+google-genai
+sentence-transformers
+faiss-cpu
+pytest
+python-dotenv
+torchmetrics
+transformers 
+huggingface-hub
+requests
+urllib3
+certifi
+tqdm
+PyYAML
+numpy  
+scipy 
+# torch 
+sqlalchemy
+passlib[bcrypt]
+python-jose[cryptography]
+python-multipart
+
+# Explicitly added Transitive Dependencies to fix ModuleNotFound Errors
+scikit-learn   
+tokenizers 
+safetensors  
+regex
+packaging
+filelock  
+distro 
+httpx   
+idna
+sniffio 
+anyio           
+pydantic==2.11.10
+pydantic-core==2.33.2
+typing-extensions
+typing-inspection
+annotated-types

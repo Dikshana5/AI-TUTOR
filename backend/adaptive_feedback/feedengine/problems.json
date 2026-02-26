@@ -1,0 +1,642 @@
+[
+    {
+        "id": "DEC001",
+        "title": "Logging Decorator",
+        "description": "Create a Python decorator to log the execution time of a function.",
+        "difficulty": "Easy",
+        "topic": "Decorators",
+        "language": "Python"
+    },
+    {
+        "id": "GEN002",
+        "title": "Infinite Sequence Generator",
+        "description": "Write a Python generator to produce an infinite sequence of numbers.",
+        "difficulty": "Medium",
+        "topic": "Generators",
+        "language": "Python"
+    },
+    {
+        "id": "DEC003",
+        "title": "Authentication Decorator",
+        "description": "Design a Python decorator to check if a user is authenticated before executing a function.",
+        "difficulty": "Hard",
+        "topic": "Decorators",
+        "language": "Python"
+    },
+    {
+        "id": "GEN004",
+        "title": "Fibonacci Sequence Generator",
+        "description": "Implement a Python generator to generate the Fibonacci sequence.",
+        "difficulty": "Easy",
+        "topic": "Generators",
+        "language": "Python"
+    },
+    {
+        "id": "DEC005",
+        "title": "Retry Decorator",
+        "description": "Create a Python decorator to retry a function a specified number of times if it fails.",
+        "difficulty": "Medium",
+        "topic": "Decorators",
+        "language": "Python"
+    },
+    {
+        "id": "GEN006",
+        "title": "Prime Number Generator",
+        "description": "Write a Python generator to generate prime numbers.",
+        "difficulty": "Hard",
+        "topic": "Generators",
+        "language": "Python"
+    },
+    {
+        "id": "DEC007",
+        "title": "Timing Decorator",
+        "description": "Design a Python decorator to measure the execution time of a function and print it.",
+        "difficulty": "Easy",
+        "topic": "Decorators",
+        "language": "Python"
+    },
+    {
+        "id": "GEN008",
+        "title": "Cartesian Product Generator",
+        "description": "Implement a Python generator to generate the Cartesian product of two lists.",
+        "difficulty": "Medium",
+        "topic": "Generators",
+        "language": "Python"
+    },
+    {
+        "id": "DEC009",
+        "title": "Caching Decorator",
+        "description": "Create a Python decorator to cache the results of a function.",
+        "difficulty": "Hard",
+        "topic": "Decorators",
+        "language": "Python"
+    },
+    {
+        "id": "GEN010",
+        "title": "Permutations Generator",
+        "description": "Write a Python generator to generate all permutations of a list.",
+        "difficulty": "Hard",
+        "topic": "Generators",
+        "language": "Python"
+    },
+    {
+        "id": "P001",
+        "title": "Student Grades Analysis",
+        "description": "Given a dataset of student grades, calculate the average grade for each subject and determine the student with the highest overall grade.",
+        "difficulty": "Easy",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P002",
+        "title": "Sales Data Visualization",
+        "description": "Load a sales dataset into a pandas DataFrame and create a bar chart to display the total sales for each region.",
+        "difficulty": "Medium",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P003",
+        "title": " Handling Missing Values",
+        "description": "Given a dataset with missing values, write a function to replace missing values with the mean of the respective column and then calculate the standard deviation of each column.",
+        "difficulty": "Hard",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P004",
+        "title": "Data Filtering and Sorting",
+        "description": "Filter a dataset to include only rows where the age is greater than 30 and the country is 'USA', then sort the resulting DataFrame by salary in descending order.",
+        "difficulty": "Easy",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P005",
+        "title": "Grouping and Aggregation",
+        "description": "Group a dataset by 'department' and calculate the average salary for each department, then sort the result by average salary in ascending order.",
+        "difficulty": "Medium",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P006",
+        "title": "Merging Datasets",
+        "description": "Merge two datasets based on a common column 'customer_id' and calculate the total spend for each customer.",
+        "difficulty": "Medium",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P007",
+        "title": "Data Cleaning and Preprocessing",
+        "description": "Clean a dataset by removing duplicates, handling missing values, and converting data types as necessary, then create a histogram to visualize the distribution of a specified column.",
+        "difficulty": "Hard",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P008",
+        "title": "Time Series Analysis",
+        "description": "Load a time series dataset into a pandas DataFrame and calculate the rolling mean and standard deviation of a specified column over a window of 7 days.",
+        "difficulty": "Hard",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P009",
+        "title": "Pivot Tables",
+        "description": "Create a pivot table to display the sum of sales for each region and product, then use the pivot table to calculate the total sales for each region.",
+        "difficulty": "Medium",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "P010",
+        "title": "Data Transformation",
+        "description": "Transform a dataset by converting categorical variables into numerical variables using one-hot encoding and then scale the numerical variables using standardization.",
+        "difficulty": "Hard",
+        "topic": "Data Analysis with Pandas Basics",
+        "language": "Python"
+    },
+    {
+        "id": "1",
+        "title": "Singleton Pattern Implementation",
+        "description": "Create a Singleton class in Java that restricts object creation for a class to only one instance, providing a global point of access to that instance.",
+        "difficulty": "Medium",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "2",
+        "title": "Factory Method Pattern for Vehicle Creation",
+        "description": "Design a Factory Method pattern in Java to create different types of vehicles (car, truck, bike) without specifying the exact class of object that will be created.",
+        "difficulty": "Hard",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "3",
+        "title": "Observer Pattern for Weather Updates",
+        "description": "Implement the Observer pattern in Java to notify registered observers when the weather changes, demonstrating a one-to-many dependency between objects.",
+        "difficulty": "Medium",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "4",
+        "title": "Decorator Pattern for Coffee Shop",
+        "description": "Apply the Decorator pattern in Java to add extra features (milk, sugar, whipped cream) to a beverage, allowing for dynamic and flexible modifications to an object.",
+        "difficulty": "Medium",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "5",
+        "title": "Strategy Pattern for Payment Methods",
+        "description": "Design a Strategy pattern in Java to encapsulate different payment methods (credit card, PayPal, bank transfer) and allow clients to choose a payment strategy at runtime.",
+        "difficulty": "Hard",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "6",
+        "title": "Adaptor Pattern for Database Connection",
+        "description": "Implement the Adaptor pattern in Java to adapt an existing database connection class to work with a new API, allowing for compatibility between two incompatible interfaces.",
+        "difficulty": "Hard",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "7",
+        "title": "Composite Pattern for File System",
+        "description": "Apply the Composite pattern in Java to represent a file system with directories and files, demonstrating a tree-like structure of objects.",
+        "difficulty": "Medium",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "8",
+        "title": "Proxy Pattern for Image Loading",
+        "description": "Design a Proxy pattern in Java to create an object that acts as an intermediary for loading and displaying images, optimizing resource usage and improving performance.",
+        "difficulty": "Medium",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "9",
+        "title": "Command Pattern for Remote Control",
+        "description": "Implement the Command pattern in Java to encapsulate requests as objects, allowing for a flexible and extensible design for a remote control system.",
+        "difficulty": "Hard",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "10",
+        "title": "Bridge Pattern for Game Development",
+        "description": "Apply the Bridge pattern in Java to separate an object's abstraction from its implementation, allowing for greater flexibility and decoupling in game development.",
+        "difficulty": "Hard",
+        "topic": "Object-Oriented Design Patterns",
+        "language": "Java"
+    },
+    {
+        "id": "MT-1",
+        "title": "Thread Synchronization",
+        "description": "Implement a program that uses Java's built-in synchronization mechanisms to protect a shared resource from concurrent access by multiple threads.",
+        "difficulty": "Medium",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-2",
+        "title": "Producer-Consumer Problem",
+        "description": "Write a Java program that demonstrates the producer-consumer problem using threads and a shared buffer.",
+        "difficulty": "Hard",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-3",
+        "title": "Deadlock Detection",
+        "description": "Create a Java program that detects deadlocks in a system with multiple threads and shared resources.",
+        "difficulty": "Hard",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-4",
+        "title": "Thread Pool Implementation",
+        "description": "Implement a thread pool in Java that can manage a pool of worker threads to execute tasks concurrently.",
+        "difficulty": "Medium",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-5",
+        "title": "Synchronized Collection Operations",
+        "description": "Write a Java program that demonstrates how to perform synchronized operations on a shared collection using the Collections.synchronizedList() method.",
+        "difficulty": "Easy",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-6",
+        "title": "Dining Philosophers Problem",
+        "description": "Implement a Java program that solves the dining philosophers problem using threads and synchronization mechanisms.",
+        "difficulty": "Hard",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-7",
+        "title": "Concurrent Data Structures",
+        "description": "Create a Java program that demonstrates the use of concurrent data structures such as ConcurrentHashMap and CopyOnWriteArrayList.",
+        "difficulty": "Medium",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-8",
+        "title": "Thread Communication",
+        "description": "Write a Java program that demonstrates how to establish communication between threads using the wait() and notify() methods.",
+        "difficulty": "Medium",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-9",
+        "title": "Starvation and Livelock",
+        "description": "Implement a Java program that demonstrates how to avoid starvation and livelock in a system with multiple threads and shared resources.",
+        "difficulty": "Hard",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "MT-10",
+        "title": "Atomic Variables",
+        "description": "Create a Java program that demonstrates the use of atomic variables to update shared variables in a thread-safe manner.",
+        "difficulty": "Easy",
+        "topic": "Multi-threading & Concurrency",
+        "language": "Java"
+    },
+    {
+        "id": "PP001",
+        "title": "Memory Leak Detector",
+        "description": "Write a C++ program to detect memory leaks in a given code snippet. The program should be able to identify dynamically allocated memory that is not deallocated.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP002",
+        "title": "Pointer Arithmetic",
+        "description": "Create a C++ function that takes an array and its size as input, and returns a pointer to the middle element of the array using pointer arithmetic.",
+        "difficulty": "Medium",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP003",
+        "title": "Dynamic Array Implementation",
+        "description": "Implement a dynamic array in C++ using pointers. The array should be able to resize itself when elements are added or removed.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP004",
+        "title": "Memory Pool Implementation",
+        "description": "Design a memory pool in C++ using pointers. The memory pool should be able to allocate and deallocate memory blocks of varying sizes.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP005",
+        "title": "Pointer to Pointer",
+        "description": "Write a C++ program that demonstrates the use of pointers to pointers. The program should be able to allocate memory for an array of integers and then use a pointer to pointer to access the elements of the array.",
+        "difficulty": "Medium",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP006",
+        "title": "Smart Pointer Implementation",
+        "description": "Implement a basic smart pointer in C++ using pointers. The smart pointer should be able to automatically manage the memory it points to.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP007",
+        "title": "Memory Fragmentation",
+        "description": "Write a C++ program that demonstrates memory fragmentation. The program should be able to allocate and deallocate memory blocks of varying sizes and then measure the amount of fragmented memory.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP008",
+        "title": "Dangling Pointer",
+        "description": "Create a C++ program that demonstrates a dangling pointer. The program should be able to allocate memory for an integer, assign its address to a pointer, and then deallocate the memory. The program should then attempt to access the memory through the dangling pointer.",
+        "difficulty": "Medium",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP009",
+        "title": "Wildcard Pointer",
+        "description": "Write a C++ program that demonstrates the use of a wildcard pointer (void*). The program should be able to allocate memory for different data types and then use a wildcard pointer to access the memory.",
+        "difficulty": "Medium",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "PP010",
+        "title": "Memory Corruption",
+        "description": "Create a C++ program that demonstrates memory corruption. The program should be able to allocate memory for an array of integers and then write beyond the bounds of the array, causing memory corruption.",
+        "difficulty": "Hard",
+        "topic": "Manual Memory Management (Pointers)",
+        "language": "C++"
+    },
+    {
+        "id": "P1",
+        "title": "Vector Operations",
+        "description": "Write a C++ program to demonstrate various operations on vectors such as insertion, deletion, and searching.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P2",
+        "title": "Map Implementation",
+        "description": "Create a C++ program to implement a simple phonebook using a map, where names are keys and phone numbers are values.",
+        "difficulty": "Medium",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P3",
+        "title": "Vector Sorting",
+        "description": "Write a C++ program to sort a vector of integers in ascending and descending order using the sort function from the algorithm library.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P4",
+        "title": "Map Iteration",
+        "description": "Create a C++ program to iterate over a map and print all its key-value pairs.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P5",
+        "title": "Vector Resize",
+        "description": "Write a C++ program to demonstrate the use of the resize function to change the size of a vector.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P6",
+        "title": "Map Erase",
+        "description": "Create a C++ program to erase elements from a map based on a given key.",
+        "difficulty": "Medium",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P7",
+        "title": "Vector Find",
+        "description": "Write a C++ program to find an element in a vector using the find function from the algorithm library.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P8",
+        "title": "Map Clear",
+        "description": "Create a C++ program to clear all elements from a map.",
+        "difficulty": "Easy",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P9",
+        "title": "Vector Merge",
+        "description": "Write a C++ program to merge two vectors into one.",
+        "difficulty": "Medium",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "P10",
+        "title": "Map Intersection",
+        "description": "Create a C++ program to find the intersection of two maps (i.e., the key-value pairs common to both maps).",
+        "difficulty": "Hard",
+        "topic": "STL Containers (Vectors/Maps)",
+        "language": "C++"
+    },
+    {
+        "id": "ASYNC-1",
+        "title": "Promise Chaining",
+        "description": "Implement a function that chains multiple promises together to perform a series of asynchronous operations",
+        "difficulty": "Medium",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-2",
+        "title": "Async/Await Error Handling",
+        "description": "Write a function that uses async/await to handle errors in a series of asynchronous operations",
+        "difficulty": "Hard",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-3",
+        "title": "Concurrent Promises",
+        "description": "Implement a function that uses Promise.all() to run multiple asynchronous operations concurrently",
+        "difficulty": "Medium",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-4",
+        "title": "Debouncing with Promises",
+        "description": "Write a function that uses promises to debounce a function, ensuring it only runs after a certain delay",
+        "difficulty": "Medium",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-5",
+        "title": "Promise.race() Implementation",
+        "description": "Implement a function that uses Promise.race() to run multiple asynchronous operations and return the first one to complete",
+        "difficulty": "Hard",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-6",
+        "title": "Async/Await with Timeout",
+        "description": "Write a function that uses async/await to implement a timeout for an asynchronous operation",
+        "difficulty": "Medium",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-7",
+        "title": "Caching with Promises",
+        "description": "Implement a function that uses promises to cache the results of an asynchronous operation",
+        "difficulty": "Hard",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-8",
+        "title": "Retry Mechanism with Promises",
+        "description": "Write a function that uses promises to implement a retry mechanism for an asynchronous operation",
+        "difficulty": "Hard",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-9",
+        "title": "Promise.allSettled() Implementation",
+        "description": "Implement a function that uses Promise.allSettled() to run multiple asynchronous operations and return their results",
+        "difficulty": "Medium",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "ASYNC-10",
+        "title": "Async/Await with Recursive Functions",
+        "description": "Write a function that uses async/await to implement a recursive function for an asynchronous operation",
+        "difficulty": "Hard",
+        "topic": "Asynchronous Programming",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-1",
+        "title": "To-Do List App",
+        "description": "Create a To-Do List app that allows users to add, remove, and edit tasks. The tasks should be stored in an array and updated in real-time in the DOM.",
+        "difficulty": "Medium",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-2",
+        "title": "Dynamic Navigation Menu",
+        "description": "Create a navigation menu that dynamically updates based on the user's location on the webpage. The menu should be hidden on smaller screens and displayed on larger screens.",
+        "difficulty": "Hard",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-3",
+        "title": "Image Gallery",
+        "description": "Create an image gallery that allows users to navigate through images using previous and next buttons. The gallery should also display the current image and its description.",
+        "difficulty": "Easy",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-4",
+        "title": "Quiz Game",
+        "description": "Create a quiz game that displays questions and possible answers. The user's score should be updated in real-time, and the game should end when all questions have been answered.",
+        "difficulty": "Medium",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-5",
+        "title": "Weather App",
+        "description": "Create a weather app that displays the current weather and forecast for a given location. The app should update in real-time based on user input.",
+        "difficulty": "Hard",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-6",
+        "title": "Timer App",
+        "description": "Create a timer app that allows users to set a timer and receive notifications when the timer expires. The timer should be updated in real-time in the DOM.",
+        "difficulty": "Easy",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-7",
+        "title": "Chat Bot",
+        "description": "Create a chat bot that responds to user input. The chat bot should display its responses in the DOM, and the user's input should be cleared after each response.",
+        "difficulty": "Medium",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-8",
+        "title": "Personal Finance Tracker",
+        "description": "Create a personal finance tracker that allows users to add, remove, and edit expenses. The expenses should be stored in an array and updated in real-time in the DOM.",
+        "difficulty": "Hard",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-9",
+        "title": "Simple Blog",
+        "description": "Create a simple blog that displays a list of posts. Each post should have a title, description, and comments section. The comments should be stored in an array and updated in real-time in the DOM.",
+        "difficulty": "Medium",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    },
+    {
+        "id": "DOM-10",
+        "title": "Game Leaderboard",
+        "description": "Create a game leaderboard that displays the top 10 players with their scores. The leaderboard should be updated in real-time based on user input.",
+        "difficulty": "Easy",
+        "topic": "DOM Manipulation",
+        "language": "JavaScript"
+    }
+]

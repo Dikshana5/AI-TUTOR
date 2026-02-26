@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: misconception_detector
+    # Add DNS configuration to resolve network issues inside the container
+    dns:
+      - 8.8.8.8  # Google Public DNS 1
+      - 8.8.4.4  # Google Public DNS 2
+    # Mount the .env file for secrets (API Key)
+    env_file:
+      - ./backend/.env
+    ports:
+      # Map the container's port 8000 to your host's port 8000
+      - "8000:8000"
+    # Ensure index files are persistent on your local machine
+    volumes:
+      - ./backend/vector_index:/app/backend/vector_index

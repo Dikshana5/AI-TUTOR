@@ -1,0 +1,122 @@
+[
+    {
+        "title": "Python is Slow",
+        "description": "Python is often perceived as a slow language due to its interpreted nature.",
+        "language": "Python",
+        "fix": "Use optimization techniques like caching, parallel processing, or compile Python code to C code."
+    },
+    {
+        "title": "Java is Not Suitable for Systems Programming",
+        "description": "Java is often seen as not being suitable for systems programming due to its abstractions and lack of direct memory access.",
+        "language": "Java",
+        "fix": "Use Java's NIO library or JNI to access native code and hardware resources directly."
+    },
+    {
+        "title": "C++ is Too Complex",
+        "description": "C++ has a steep learning curve due to its many features, making it seem too complex for beginners.",
+        "language": "C++",
+        "fix": "Start with basic syntax and gradually learn more advanced features like templates and operator overloading."
+    },
+    {
+        "title": "JavaScript is Only for Web Development",
+        "description": "JavaScript is often seen as only being used for web development, but it can be used for much more.",
+        "language": "JavaScript",
+        "fix": "Explore Node.js, Electron, and other frameworks for using JavaScript in non-web development contexts."
+    },
+    {
+        "title": "Garbage Collection is Always a Good Thing",
+        "description": "Garbage collection can simplify memory management, but it can also introduce performance issues if not used carefully.",
+        "language": "Java, Python, JavaScript",
+        "fix": "Understand how garbage collection works in your language of choice and use it wisely to avoid performance issues."
+    },
+    {
+        "title": "NULL and undefined are the Same",
+        "description": "NULL and undefined are often confused with each other, but they have distinct meanings in different programming languages.",
+        "language": "C++, Java, JavaScript",
+        "fix": "Understand the differences between NULL and undefined in your language of choice and use them correctly."
+    },
+    {
+        "title": "You Should Always Use the Latest Version of a Library",
+        "description": "Using the latest version of a library can introduce breaking changes and compatibility issues.",
+        "language": "Python, Java, JavaScript",
+        "fix": "Carefully evaluate the trade-offs of updating to the latest version of a library and consider stability and compatibility before doing so."
+    },
+    {
+        "title": "Multithreading is Always Faster",
+        "description": "Multithreading can improve performance, but it can also introduce complexity and overhead if not used correctly.",
+        "language": "C++, Java, Python",
+        "fix": "Understand the trade-offs of multithreading and use it judiciously to avoid introducing unnecessary complexity."
+    },
+    {
+        "title": "Error Handling is Optional",
+        "description": "Error handling is often seen as optional, but it's essential for writing robust and reliable code.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Always handle potential errors and exceptions in your code to ensure it can recover from unexpected situations."
+    },
+    {
+        "title": "Code Comments are Unnecessary",
+        "description": "Code comments are often seen as unnecessary, but they're essential for explaining complex code and making it maintainable.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Write clear and concise comments to explain your code and make it easier for others to understand and maintain."
+    },
+    {
+        "title": "Type Systems are Not Important",
+        "description": "Type systems are often seen as optional, but they're essential for catching type-related errors and ensuring code correctness.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Use type systems and type checking to ensure your code is correct and maintainable."
+    },
+    {
+        "title": "Security is Someone Else's Problem",
+        "description": "Security is often seen as someone else's problem, but it's every developer's responsibility to ensure their code is secure.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Prioritize security in your code and follow best practices to prevent common security vulnerabilities."
+    },
+    {
+        "title": "Code Optimization is Only for Performance",
+        "description": "Code optimization is often seen as only being for performance, but it can also improve maintainability and readability.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Optimize your code for performance, maintainability, and readability to make it more efficient and easier to work with."
+    },
+    {
+        "title": "Testing is Not Necessary",
+        "description": "Testing is often seen as not necessary, but it's essential for ensuring your code works correctly and catchings bugs.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Write comprehensive tests for your code to ensure it works correctly and catch any bugs or issues."
+    },
+    {
+        "title": "Refactoring is a Waste of Time",
+        "description": "Refactoring is often seen as a waste of time, but it's essential for maintaining and improving your code.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Regularly refactor your code to improve its maintainability, readability, and performance."
+    },
+    {
+        "title": "Documentation is Not Important",
+        "description": "Documentation is often seen as not important, but it's essential for explaining how your code works and making it maintainable.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Write clear and concise documentation to explain your code and make it easier for others to understand and maintain."
+    },
+    {
+        "title": "Technical Debt is Inevitable",
+        "description": "Technical debt is often seen as inevitable, but it can be managed and reduced with careful planning and prioritization.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Prioritize technical debt reduction and allocate time and resources to address it regularly."
+    },
+    {
+        "title": "You Should Always Use Design Patterns",
+        "description": "Design patterns can be useful, but they should not be used blindly without considering the specific needs of your project.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Use design patterns judiciously and only when they provide a clear benefit to your project."
+    },
+    {
+        "title": "Code Reviews are a Waste of Time",
+        "description": "Code reviews are often seen as a waste of time, but they're essential for improving code quality and catching issues early.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Regularly conduct code reviews to improve code quality, catch issues early, and share knowledge among team members."
+    },
+    {
+        "title": "Automated Testing is Enough",
+        "description": "Automated testing is important, but it's not enough on its own to ensure code quality and correctness.",
+        "language": "Python, Java, JavaScript, C++",
+        "fix": "Combine automated testing with manual testing, code reviews, and other quality assurance practices to ensure code quality and correctness."
+    }
+]

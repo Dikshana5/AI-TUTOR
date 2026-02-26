@@ -1,0 +1,146 @@
+/* Learn page background and layout */
+.home {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow: auto;
+  color: #fff;
+  text-align: center;
+  font-family: "Koulen", sans-serif;
+  padding: 20px;
+}
+
+/* Dark overlay for readability */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.75)
+  );
+  z-index: 1;
+}
+
+/* Bring content above overlay */
+.home > *:not(.overlay) {
+  position: relative;
+  z-index: 2;
+}
+
+/* Top controls dots group - badge style */
+.top-controls {
+  position: fixed !important;
+  right: 20px !important;
+  top: 20px !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-items: center !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+/* Individual dots */
+.top-controls span {
+  background-color: #d9d9d9;
+  border-radius: 50%;
+  height: clamp(30px, 4vh, 48px);
+  width: clamp(30px, 4vh, 53px);
+}
+
+/* Logo */
+.logo {
+  font-size: 52px;
+  letter-spacing: 4px;
+  margin-bottom: 14px;
+  margin-top: -80px;
+}
+
+/* Learn page tagline */
+.learn-tagline {
+  font-size: 16px;
+  letter-spacing: 1.2px;
+  opacity: 0.9;
+  margin-bottom: 20px;
+  font-weight: normal;
+}
+
+/* Learn page heading */
+.learn-heading {
+  font-size: 32px;
+  letter-spacing: 2px;
+  margin-bottom: 50px;
+  font-weight: bold;
+}
+
+/* Courses container */
+.courses-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 60px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+}
+
+/* Course cards */
+.course-card {
+  width: 260px;
+  background: rgba(200, 200, 200, 0.4);
+  border-radius: 20px;
+  padding: 30px 25px;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  background: rgba(200, 200, 200, 0.5);
+}
+
+.course-card h3 {
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+  font-weight: bold;
+}
+
+.course-card p {
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  opacity: 0.9;
+  font-family: "Courier New", monospace;
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.bottom-nav span {
+  opacity: 0.75;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.bottom-nav span:hover {
+  opacity: 1;
+}
