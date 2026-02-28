@@ -10,6 +10,7 @@ export default function Progress() {
 
   useEffect(() => {
     let cancelled = false;
+
     fetchHealth()
       .then((data) => {
         if (!cancelled) setHealth(data);
@@ -18,6 +19,7 @@ export default function Progress() {
         if (!cancelled)
           setError("Backend is offline. Start the API server to track progress.");
       });
+
     return () => {
       cancelled = true;
     };
@@ -26,12 +28,14 @@ export default function Progress() {
   return (
     <div className="home">
       <div className="overlay"></div>
+
       <div className="top-controls">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
       </div>
+
       <h1 className="logo">COUTOR</h1>
 
       <button
@@ -53,7 +57,9 @@ export default function Progress() {
         ← BACK
       </button>
 
-      <h2 style={{ color: "white", marginTop: "50px" }}>PROGRESS</h2>
+      <h2 style={{ color: "white", marginTop: "50px" }}>
+        PROGRESS
+      </h2>
 
       <div style={{ color: "white", marginTop: "20px" }}>
         {health && (
@@ -62,10 +68,11 @@ export default function Progress() {
             <p>Engine: {health.engine}</p>
           </>
         )}
+
         {error && <p style={{ color: "salmon" }}>{error}</p>}
+
         {!health && !error && <p>Checking backend status...</p>}
       </div>
-
     </div>
   );
 }

@@ -24,6 +24,10 @@ from adaptive_feedback.engine import get_next_step, PROBLEMS_DB
 from database import engine, Base, get_db
 from auth_utils import get_password_hash, verify_password, create_access_token
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
@@ -81,24 +85,16 @@ async def analyze(req: DetectRequest):
     Takes student code and returns the AI diagnosis.
     """
     try:
-        # We pass the req.dict() because our updated detector expects a dictionary
         result = run_detection(req.model_dump())
-        return result
+
+        return {
+            "semantic_top_match": result.get("semantic_top_match"),
+            "language": result.get("language", "python")
+        }
+
     except Exception as e:
-        # This will print the error in your Uvicorn terminal so you can see it
         print(f"Detailed Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/next-step")
-def next_step(payload: dict):
-    try:
-        analysis = DetectResponse(**payload)
-        lang = payload.get("language", "python")
-        return get_next_step(analysis, current_lang=lang)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
 
 
 @app.get("/problems")
