@@ -38,28 +38,6 @@
   z-index: 2;
 }
 
-/* Top controls dots group - badge style */
-.top-controls {
-  position: fixed !important;
-  right: 20px !important;
-  top: 20px !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  gap: 12px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  align-items: center !important;
-  height: auto !important;
-  width: auto !important;
-}
-
-/* Individual dots */
-.top-controls span {
-  background-color: #d9d9d9;
-  border-radius: 50%;
-  height: clamp(30px, 4vh, 48px);
-  width: clamp(30px, 4vh, 53px);
-}
 
 /* Logo */
 .logo {
@@ -88,6 +66,7 @@
   font-weight: bold;
   position: relative;
   z-index: 2;
+  text-align: center;
 }
 
 /* Projects container */
@@ -100,6 +79,9 @@
   max-width: 1200px;
   position: relative;
   z-index: 2;
+  min-height: 200px; /* prevent layout shift on load */
+  width: 100%; /* ensure full width during load */
+  contain: layout; /* optimize rendering performance */
 }
 
 /* Project cards */
@@ -135,6 +117,30 @@
   opacity: 0.9;
   font-family: "Courier New", monospace;
   color: #000;
+}
+
+/* small daily streak progress graph */
+.streak-graph {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: grid;
+  grid-auto-rows: 6px;
+  gap: 1px;
+  z-index: 10;
+}
+.streak-row {
+  display: flex;
+  gap: 1px;
+}
+.streak-cell {
+  width: 6px;
+  height: 6px;
+  background: #444;
+  border-radius: 1px;
+}
+.streak-cell.active {
+  background: #4caf50;
 }
 
 /* Bottom nav */

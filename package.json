@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-calendar-heatmap": "^1.10.0",
+    "recharts": "^3.7.0"
+  }
+}

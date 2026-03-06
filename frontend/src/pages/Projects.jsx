@@ -33,10 +33,6 @@ export default function Projects() {
     <div className="home" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="overlay"></div>
 
-      <div className="top-controls">
-        <span></span><span></span><span></span><span></span>
-      </div>
-
       <h1 className="logo">COUTOR</h1>
       <p className="projects-tagline">{'{ FROM CODE TO KNOWLEDGE };'}</p>
       <h2 className="projects-heading">
@@ -101,7 +97,7 @@ export default function Projects() {
           zIndex: 100,
         }}
       >
-        ← BACK
+        {"<<"}
       </button>
     </div>
   );

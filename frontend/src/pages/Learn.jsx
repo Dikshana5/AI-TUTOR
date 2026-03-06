@@ -26,14 +26,6 @@ export default function Learn() {
       {/* dark overlay */}
       <div className="overlay"></div>
 
-      {/* top dots */}
-      <div className="top-controls">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
       <h1 className="logo">COUTOR</h1>
 
       <p className="learn-tagline">{'{ CODING YOUR WAY TO LEARNING };'}</p>
@@ -70,7 +62,7 @@ export default function Learn() {
           zIndex: 100
         }}
       >
-        ← BACK
+        {"<<"}
       </button>
 
       

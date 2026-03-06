@@ -1,0 +1,282 @@
+/* Progress Page Container */
+.progress-container {
+  width: 100vw;
+  min-height: 100vh;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #fff;
+  font-family: "Koulen", sans-serif;
+  overflow-y: auto;
+  padding: 40px 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.progress-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dark overlay */
+.progress-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.05),
+    rgba(0, 0, 0, 0.3)
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Content wrapper */
+.progress-content {
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Progress Section */
+.progress-section {
+  background: rgba(217, 217, 217, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.progress-section h2 {
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin: 0 0 20px 0;
+  font-weight: bold;
+  color: #000;
+  text-transform: lowercase;
+}
+
+/* Daily Contributions */
+.daily-contributions {
+  margin-bottom: 40px;
+}
+
+.contrib-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.contrib-summary {
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.year-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.year-btn {
+  padding: 8px 16px;
+  background: rgba(200, 200, 200, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #000;
+  cursor: pointer;
+  font-family: "Koulen", sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.year-btn:hover {
+  background: rgba(200, 200, 200, 0.6);
+}
+
+.year-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.contrib-grid {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.contrib-header-grid {
+  display: grid;
+  grid-template-columns: 40px repeat(12, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+  padding-left: 30px;
+}
+
+.month-label {
+  text-align: center;
+  font-size: 12px;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.contrib-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contrib-row {
+  display: grid;
+  grid-template-columns: 40px repeat(12, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.day-label {
+  font-size: 12px;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.contrib-cell {
+  width: 16px;
+  height: 16px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contrib-cell:hover {
+  opacity: 1 !important;
+}
+
+.contrib-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.legend-scale {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-cell {
+  width: 12px;
+  height: 12px;
+  background: #4caf50;
+  border-radius: 2px;
+}
+
+/* Charts Wrapper */
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.learning-speed,
+.lessons-completed {
+  min-height: 400px;
+}
+
+/* Lessons Completed */
+.lessons-chart {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.lessons-header {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.lesson-day {
+  text-align: center;
+  font-size: 12px;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.lesson-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lesson-name {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+}}
+
+.lesson-bar {
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.lesson-label {
+  font-size: 11px;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .progress-container {
+    padding: 20px 10px;
+  }
+
+  .progress-section {
+    padding: 20px;
+  }
+
+  .contrib-header-grid {
+    grid-template-columns: 30px repeat(12, 1fr);
+    padding-left: 10px;
+  }
+
+  .contrib-row {
+    grid-template-columns: 30px repeat(12, 1fr);
+  }
+
+  .lessons-header {
+    grid-template-columns: 60px repeat(7, 1fr);
+  }
+
+  .lesson-row {
+    grid-template-columns: 60px 1fr;
+  }
+}

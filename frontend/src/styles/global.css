@@ -38,3 +38,15 @@ body {
   padding-bottom: 120px;
   
 }
+.color-empty {
+  fill: #1e293b;
+}
+.color-low {
+  fill: #22c55e;
+}
+.color-medium {
+  fill: #16a34a;
+}
+.color-high {
+  fill: #065f46;
+}

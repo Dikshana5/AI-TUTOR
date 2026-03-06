@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+﻿from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
@@ -133,19 +133,14 @@ def next_step(payload: dict):
 
 @app.post("/chat")
 def chat_endpoint(payload: dict):
-    """Simple chat endpoint that forwards messages to the Groq chat model and returns the assistant reply.
-
-    If the Groq client is not configured or a remote error occurs, return a safe fallback reply so the frontend can still function.
-    """
+    """Simple chat endpoint that forwards messages to the Groq chat model and returns the assistant reply."""
+    if chat_client is None or MODEL_ID is None:
+        raise HTTPException(status_code=500, detail="Chat model not configured on server")
 
     messages = payload.get("messages")
     if not messages:
         msg = payload.get("message") or ""
         messages = [{"role": "user", "content": msg}]
-
-    # If chat client not configured, return a friendly fallback reply
-    if chat_client is None or MODEL_ID is None:
-        return {"reply": "(local) The chat model is not configured on this server. Try setting GROQ_API_KEY or OPENAI_API_KEY. Meanwhile, here's a hint: focus on breaking the problem into smaller steps."}
 
     try:
         resp = chat_client.chat.completions.create(messages=messages, model=MODEL_ID)
@@ -153,5 +148,4 @@ def chat_endpoint(payload: dict):
         return {"reply": text}
     except Exception as e:
         print(f"Chat error: {e}")
-        # Return fallback reply instead of raising so frontend still receives a response
-        return {"reply": "(local) Could not reach LLM service. Please check server configuration."}
+        raise HTTPException(status_code=500, detail=str(e))

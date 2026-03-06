@@ -10,14 +10,6 @@ export default function Home() {
       {/* dark overlay */}
       <div className="overlay"></div>
 
-      {/* top dots */}
-      <div className="top-controls">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
       <h1 className="logo">COUTOR</h1>
 
       <p className="subtitle">
@@ -25,7 +17,6 @@ export default function Home() {
         IMPROVE, AND CONFIDENTLY BUILD BETTER SOFTWARE
       </p>
 
-      <div className="preview-box"></div>
 
       <div className="button-group">
         <button className="start-btn" onClick={() => navigate("/learn")}>

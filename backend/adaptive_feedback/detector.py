@@ -5,7 +5,6 @@ import pickle
 import faiss
 import numpy as np
 from typing import List, Dict, Any
-from groq import Groq
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
@@ -21,7 +20,19 @@ EMBEDDING_MODEL = None
 INDEX = None
 MISCONCEPTIONS_DATA = None
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+try:
+    from groq import Groq
+except Exception:
+    Groq = None
+
+_groq_api_key = os.environ.get("GROQ_API_KEY")
+if Groq is not None and _groq_api_key:
+    try:
+        client = Groq(api_key=_groq_api_key)
+    except Exception:
+        client = None
+else:
+    client = None
 
 # --- 2. INIT ---
 _ai_initialized = False
