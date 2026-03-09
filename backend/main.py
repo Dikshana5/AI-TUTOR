@@ -11,6 +11,35 @@ from adaptive_feedback.detector import run_detection, initialize_ai
 from adaptive_feedback.engine import get_next_step, PROBLEMS_DB
 
 
+# 4. Database and Auth Imports
+from database import engine, Base, get_db
+from auth_utils import get_password_hash, verify_password, create_access_token
+
+from dotenv import load_dotenv
+load_dotenv()
+import os
+try:
+    from groq import Groq
+    _api_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("GROQ_API_KEY")
+    chat_client = Groq(api_key=_api_key) if _api_key else None
+    MODEL_ID = os.environ.get("GROQ_MODEL") or "llama-3.3-70b-versatile"
+except Exception:
+    chat_client = None
+    MODEL_ID = None
+
+
+@app.on_event("startup")
+def startup_event():
+    try:
+        initialize_ai()
+        print("AI engine initialized")
+    except Exception as e:
+        print("AI initialization skipped:", e)
+
+@app.get("/")
+def root():
+    return {"message": "AI Programming Tutor API running"}
+
 app = FastAPI(title="AI Programming Tutor - Master API")
 
 app.add_middleware(

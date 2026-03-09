@@ -1,35 +1,35 @@
 # Core Dependencies
 fastapi
 uvicorn[standard]
-openai              # <-- Changed to 'openai'
+openai
 sentence-transformers
-faiss-cpu
+faiss-cpu; sys_platform != "win32"  # On Windows, install via conda: `conda install -c conda-forge faiss-cpu`
 pytest
 python-dotenv
 torchmetrics
-transformers 
+transformers
 huggingface-hub
 requests
 urllib3
 certifi
 tqdm
 PyYAML
-numpy  
-scipy 
-# torch             # <-- This line is fine as a comment
+numpy
+scipy
+# torch
 
-# Explicitly added Transitive Dependencies to fix ModuleNotFound Errors
-scikit-learn   
-tokenizers 
-safetensors  
+# Explicitly added transitive dependencies to avoid ModuleNotFound errors
+scikit-learn
+tokenizers
+safetensors
 regex
 packaging
-filelock  
-distro 
-httpx   
+filelock
+distro
+httpx
 idna
-sniffio 
-anyio           
+sniffio
+anyio
 typing-extensions
 typing-inspection
 annotated-types

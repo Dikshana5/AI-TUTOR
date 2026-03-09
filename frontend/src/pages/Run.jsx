@@ -1,71 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import backgroundImage from "../assets/background.png";
-import { analyzeCode, fetchNextStep } from "../api";
+import { analyzeCode, fetchNextStep, sendChatMessage } from "../api";
 import { normalizeLanguage } from "../normalizelanguage";
+import "../styles/run.css";
 
 const PROBLEM_TEMPLATES = {
   "C++": [
-    `// Problem 1: Print numbers from 1 to N
-
-#include <iostream>
-using namespace std;
-
-int main() {
- int n;
- cin >> n;
-
- // your code here
-
- return 0;
-}`,
-    `// Problem 2: Check if a number is prime
-
-#include <iostream>
-using namespace std;
-
-int main() {
- int n;
- cin >> n;
-
- // your code here
-
- return 0;
-}`,
+    `// Problem 1: Print numbers from 1 to N\n\n#include <iostream>\nusing namespace std;\n\nint main() {\n int n;\n cin >> n;\n // your code here\n return 0;\n}`,
+    `// Problem 2: Check if a number is prime\n\n#include <iostream>\nusing namespace std;\n\nint main() {\n int n;\n cin >> n;\n // your code here\n return 0;\n}`,
   ],
   "JAVA": [
-    `// Problem 1: Reverse a string
-
-public class Main {
- public static void main(String[] args) {
-  // your code here
- }
-}`,
-    `// Problem 2: Find largest element in array
-
-public class Main {
- public static void main(String[] args) {
-  // your code here
- }
-}`,
+    `// Problem 1: Reverse a string\n\npublic class Main {\n public static void main(String[] args) {\n  // your code here\n }\n}`,
+    `// Problem 2: Find largest element in array\n\npublic class Main {\n public static void main(String[] args) {\n  // your code here\n }\n}`,
   ],
   "PYTHON": [
-    `# Problem 1: Count vowels in a string
-
-s = input()
-# your code here
-`,
-    `# Problem 2: Find factorial of a number
-
-n = int(input())
-# your code here
-`,
+    `# Problem 1: Count vowels in a string\n\ns = input()\n# your code here\n`,
+    `# Problem 2: Find factorial of a number\n\nn = int(input())\n# your code here\n`,
   ],
 };
 
 export default function Run() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isProject = Boolean(location.state?.title);
 
   const language =
     location.state?.language &&
@@ -77,15 +36,24 @@ export default function Run() {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState(null);
-  const [nextStep, setNextStep] = useState(null);
+  const [output, setOutput] = useState("");
   const [error, setError] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatStyle, setChatStyle] = useState({ left: 20, top: 120, width: 260, height: 250 });
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
 
   useEffect(() => {
-    setCode(PROBLEM_TEMPLATES[language][problemIndex]);
+    if (isProject) {
+      // start with empty code for projects
+      setCode("// write your code here\n");
+    } else {
+      setCode(PROBLEM_TEMPLATES[language][problemIndex]);
+    }
     setAnalysis(null);
-    setNextStep(null);
+    setOutput("");
     setError("");
-  }, [language, problemIndex]);
+  }, [language, problemIndex, isProject]);
 
   async function handleAnalyze() {
     if (!code.trim()) {
@@ -95,6 +63,7 @@ export default function Run() {
 
     setLoading(true);
     setError("");
+    setOutput("");
 
     try {
       const result = await analyzeCode({
@@ -105,149 +74,241 @@ export default function Run() {
       });
 
       setAnalysis(result);
-
-      const step = await fetchNextStep(result, normalizeLanguage(language));
-      setNextStep(step);
+      setOutput("Analysis complete. Check feedback below.");
     } catch (e) {
       setError("AI analysis failed. Try again.");
+      setOutput("");
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleNextProblem() {
-    if (!analysis) {
-      setError("Analyze your code first.");
-      return;
+  function toggleChat() {
+    const analysisSidebar = document.querySelector(".analysis-sidebar");
+    const margin = 16;
+    const extraWidth = 20; // 0.5cm additional width
+    let desiredHeight, topPosition, rightPos, panelWidth;
+
+    if (analysisSidebar) {
+      // Project mode: align chat perfectly with analysis sidebar
+      const rect = analysisSidebar.getBoundingClientRect();
+      // Match analysis sidebar dimensions exactly, plus extra width
+      desiredHeight = rect.height;
+      topPosition = rect.top;
+      rightPos = window.innerWidth - rect.right + margin - extraWidth;
+      panelWidth = rect.width + extraWidth;
+    } else {
+      // Lesson mode: position chat on the right side
+      desiredHeight = 250;
+      topPosition = 120;
+      rightPos = 20;
+      panelWidth = 260;
     }
 
-    setLoading(true);
-    setError("");
+    setChatStyle({
+      right: rightPos,
+      top: topPosition,
+      width: panelWidth,
+      height: desiredHeight,
+    });
+    setChatOpen((s) => !s);
+  }
+
+  useEffect(() => {
+    function onResize() {
+      if (!chatOpen) return;
+      const analysisSidebar = document.querySelector(".analysis-sidebar");
+// reduce panel width by 0.5cm (20px) instead of adding
+    const extraWidth = -20; // subtract extra width
+      const margin = 16;
+
+      if (analysisSidebar) {
+        const rect = analysisSidebar.getBoundingClientRect();
+        setChatStyle({
+          right: window.innerWidth - rect.right + margin - extraWidth,
+          top: rect.top,
+          width: rect.width + extraWidth,
+          height: rect.height,
+        });
+      }
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [chatOpen]);
+
+  async function handleSendChat(e) {
+    e && e.preventDefault();
+    if (!chatInput.trim()) return;
+    const userMsg = chatInput.trim();
+    setChatMessages((m) => [...m, { role: "user", content: userMsg }]);
+    setChatInput("");
 
     try {
-      const nextProblem = await fetchNextStep(analysis);
-      setCode(nextProblem.template || nextProblem.description || "");
-      setAnalysis(null);
-    } catch (e) {
-      setError("Failed to load next challenge.");
-    } finally {
-      setLoading(false);
+      const res = await sendChatMessage(userMsg);
+      const reply = res.reply || res.text || "";
+      setChatMessages((m) => [...m, { role: "assistant", content: reply }]);
+    } catch (err) {
+      setChatMessages((m) => [...m, { role: "assistant", content: "(error) Could not get reply" }]);
     }
   }
+
+  const messagesEndRef = useRef(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
 
   return (
     <div
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        padding: "40px",
-        color: "white",
-        fontFamily: "Koulen, sans-serif",
-      }}
+      className="run-container"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <button onClick={() => navigate("/projects")}>← BACK</button>
+      <div className="overlay"></div>
 
-      <h1>RUN — {language}</h1>
-
-      <h3>
-        Problem {problemIndex + 1} of{" "}
-        {PROBLEM_TEMPLATES[language].length}
-      </h3>
-
-      <textarea
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        style={{
-          width: "100%",
-          minHeight: "320px",
-          background: "rgba(0,0,0,0.8)",
-          color: "white",
-          fontFamily: "monospace",
-          padding: "12px",
-          borderRadius: "8px",
-          border: "1px solid #555",
-        }}
-      />
-
-      <button
-        onClick={handleAnalyze}
-        disabled={loading}
-        style={{ marginTop: 12 }}
-      >
-        {loading ? "Analyzing..." : "Analyze with AI"}
+      <button className="back-btn" onClick={() => navigate("/projects")}>
+        {"<<"}
       </button>
 
-      {error && <p style={{ color: "salmon" }}>{error}</p>}
+      <div className="run-content">
+        {/* LEFT SIDEBAR - LESSONS (lesson mode only) */}
+        {!isProject && (
+          <div className="left-sidebar">
+            <h3>LESSONS</h3>
+            <div className="lessons-list">
+              {PROBLEM_TEMPLATES[language].map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`lesson-btn ${
+                    problemIndex === idx ? "active" : ""
+                  }`}
+                  onClick={() => setProblemIndex(idx)}
+                >
+                  Problem {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
-      {analysis && (
-        <div
-          style={{
-            marginTop: "20px",
-            background: "rgba(0,0,0,0.7)",
-            padding: "16px",
-            borderRadius: "10px",
-            border: "1px solid #555",
-          }}
-        >
-          <p>
-            <strong>Confidence:</strong>{" "}
-            {Math.round((analysis.confidence || 0) * 100)}%
-          </p>
+        {/* CENTER - CODE & OUTPUT */}
+        <div className={`code-output-section ${isProject ? "project-layout" : ""}`}>
+          {/* CODE EDITOR */}
+          <div className="code-box">
+            <div className="code-header">
+              <h3>
+              {isProject
+                ? location.state?.title || "CODE"
+                : `CODE — ${language}`}
+            </h3>
+            {!isProject && (
+              <span className="problem-counter">
+                {problemIndex + 1} / {PROBLEM_TEMPLATES[language].length}
+              </span>
+            )}
+            </div>
+            <textarea
+              className="code-editor"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Write your code here..."
+            />
+            <div className="code-footer">
+              <button
+                className="analyze-btn"
+                onClick={handleAnalyze}
+                disabled={loading}
+              >
+                {loading ? "Analyzing..." : "Analyse with Syntheia"}
+              </button>
+            </div>
+          </div>
 
-          <p>
-            <strong>Detected Issues:</strong>{" "}
-            {analysis.error_types?.length
-              ? analysis.error_types.join(", ")
-              : "None"}
-          </p>
-
-          <hr style={{ margin: "12px 0", opacity: 0.3 }} />
-
-          <h3>AI Feedback</h3>
-
-          {analysis.diagnosis?.map((d, idx) => (
-            <div key={idx} style={{ marginBottom: "12px" }}>
-              <p>{d.message}</p>
-              {d.fix && (
-                <p style={{ color: "#9be7ff", marginTop: "6px" }}>
-                  <strong>Suggested Fix:</strong> {d.fix}
-                </p>
+          {/* OUTPUT SECTION */}
+          <div className="output-box">
+            <div className="output-header">
+              <h3>OUTPUT</h3>
+            </div>
+            <div className="output-content">
+              {error && (
+                <p style={{ color: "#ff6b6b" }}>❌ {error}</p>
+              )}
+              {output && <p style={{ color: "#4CAF50" }}>{output}</p>}
+              {!error && !output && (
+                <p style={{ opacity: 0.5 }}>Output appears here...</p>
               )}
             </div>
-          ))}
+          </div>
         </div>
-      )}
 
-      {nextStep && (
+        {/* RIGHT SIDEBAR - ANALYSIS (both modes) */}
+        <div className="analysis-sidebar">
+          <h3>ANALYSIS</h3>
+          <div className="analysis-content">
+            {analysis ? (
+              <>
+                <p>
+                  <strong>Confidence:</strong>{" "}
+                  {Math.round((analysis.confidence || 0) * 100)}%
+                </p>
+                {analysis.diagnosis?.map((d, idx) => (
+                  <div key={idx} style={{ marginTop: "8px" }}>
+                    <p>{d.message}</p>
+                    {d.fix && (
+                      <p style={{ color: "#9be7ff", fontSize: "12px" }}>
+                        ✓ {d.fix}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </>
+            ) : (
+              <p style={{ opacity: 0.6 }}>Run analysis to see feedback</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* CHAT BUBBLE ICON - BOTTOM LEFT */}
+      <div className="chat-bubble" onClick={toggleChat} role="button" tabIndex={0}>
+        💬
+      </div>
+
+      {chatOpen && (
         <div
-          style={{
-            marginTop: 20,
-            background: "#000",
-            padding: 16,
-            borderRadius: 8,
-          }}
+          className="chat-panel"
+          style={{ right: chatStyle.right, top: chatStyle.top, width: chatStyle.width, height: chatStyle.height }}
         >
-          <h3>{nextStep.title}</h3>
-          <p>{nextStep.description}</p>
-          {nextStep.hint && <p>💡 {nextStep.hint}</p>}
+          <div className="chat-panel-header">
+            <strong>Syntheia - Your Coding Tutor</strong>
+            <button className="chat-close" onClick={() => setChatOpen(false)}>#</button>
+          </div>
+          <div className="chat-panel-body">
+            <div className="chat-messages">
+              {chatMessages.length === 0 && (
+                <p style={{ opacity: 0.85 }}>Ask the tutor a question or get hints related to the lessons.</p>
+              )}
+              {chatMessages.map((m, i) => (
+                <div key={i} className={`chat-msg ${m.role}`}>
+                  <span className="msg-role">{m.role === "user" ? "You" : "Tutor"}</span>
+                  <div className="msg-content">{m.content}</div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <form className="chat-input-form" onSubmit={handleSendChat}>
+              <input
+                className="chat-input"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask Syntheia"
+              />
+              <button className="chat-send" type="submit">Send</button>
+            </form>
+          </div>
         </div>
       )}
-
-      <button
-        onClick={handleNextProblem}
-        style={{
-          marginTop: 24,
-          padding: "10px 22px",
-          borderRadius: 20,
-          border: "none",
-          background: "black",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Start Next Challenge →
-      </button>
     </div>
   );
 }

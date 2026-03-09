@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup, login } from "../api";
+import backgroundImage from "../assets/background.png";
 import "../styles/home.css";
 
 export default function Account() {
@@ -63,14 +64,8 @@ export default function Account() {
   };
 
   return (
-    <div className="home">
+    <div className="home account-page" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="overlay"></div>
-      <div className="top-controls">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
       <h1 className="logo">COUTOR</h1>
 
       <button
@@ -89,54 +84,36 @@ export default function Account() {
           zIndex: 100
         }}
       >
-        ← BACK
+        {"<<"}
       </button>
 
-      <div style={{
-        position: "relative",
-        zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        color: "white"
-      }}>
-        <h2 style={{ fontFamily: "Koulen, sans-serif", fontSize: "40px", marginBottom: "20px" }}>
+      {/* content container matches other pages alignments */}
+      <div className="account-container">
+        <h2 className="account-heading">
           {loggedUser ? "PROFILE" : (isLogin ? "LOGIN" : "SIGNUP")}
         </h2>
 
         {loggedUser ? (
-          <div style={{ textAlign: "center", background: "rgba(0,0,0,0.5)", padding: "40px", borderRadius: "20px" }}>
-            <p style={{ fontSize: "24px", marginBottom: "20px" }}>Welcome, {loggedUser.username}!</p>
+          <div className="auth-box">
+            <p className="auth-welcome">Welcome, {loggedUser.username}!</p>
+            <div className="user-details">
+              <h3>User Details</h3>
+              <p><strong>Username:</strong> {loggedUser.username}</p>
+              <p><strong>Email:</strong> {loggedUser.email || 'Not provided'}</p>
+              <p><strong>Account Created:</strong> March 2026</p>
+              <p><strong>Lessons Completed:</strong> 5</p>
+            </div>
             <button
               onClick={handleLogout}
-              style={{
-                padding: "10px 20px",
-                background: "#ff4b2b",
-                color: "white",
-                border: "none",
-                borderRadius: "10px",
-                cursor: "pointer",
-                fontSize: "18px",
-                fontFamily: "Koulen, sans-serif"
-              }}
+              className="auth-logout-btn"
             >
               LOGOUT
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            width: "300px",
-            background: "rgba(0,0,0,0.5)",
-            padding: "30px",
-            borderRadius: "20px"
-          }}>
-            {error && <p style={{ color: "#ff4b2b", textAlign: "center" }}>{error}</p>}
-            {success && <p style={{ color: "#4CAF50", textAlign: "center" }}>{success}</p>}
+          <form onSubmit={handleSubmit} className="auth-form">
+            {error && <p className="auth-error">{error}</p>}
+            {success && <p className="auth-success">{success}</p>}
 
             <input
               type="text"
@@ -145,7 +122,7 @@ export default function Account() {
               value={formData.username}
               onChange={handleChange}
               required
-              style={{ padding: "12px", borderRadius: "10px", border: "1px solid #999", background: "rgba(255,255,255,0.1)", color: "white" }}
+              className="auth-input"
             />
 
             {!isLogin && (
@@ -156,7 +133,7 @@ export default function Account() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                style={{ padding: "12px", borderRadius: "10px", border: "1px solid #999", background: "rgba(255,255,255,0.1)", color: "white" }}
+                className="auth-input"
               />
             )}
 
@@ -167,25 +144,14 @@ export default function Account() {
               value={formData.password}
               onChange={handleChange}
               required
-              style={{ padding: "12px", borderRadius: "10px", border: "1px solid #999", background: "rgba(255,255,255,0.1)", color: "white" }}
+              className="auth-input"
             />
 
-            <button type="submit" style={{
-              padding: "12px",
-              background: "#4CAF50",
-              color: "white",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              fontSize: "18px",
-              marginTop: "10px",
-              fontFamily: "Koulen, sans-serif"
-            }}>
+            <button type="submit" className="auth-submit-btn">
               {isLogin ? "LOGIN" : "SIGNUP"}
             </button>
 
-            <p style={{ textAlign: "center", cursor: "pointer", marginTop: "10px", fontSize: "14px" }}
-              onClick={() => setIsLogin(!isLogin)}>
+            <p className="auth-toggle" onClick={() => setIsLogin(!isLogin)}>
               {isLogin ? "Don't have an account? signup" : "Already have an account? Login"}
             </p>
           </form>

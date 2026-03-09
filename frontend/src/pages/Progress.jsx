@@ -1,78 +1,176 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/home.css";
-import { fetchHealth } from "../api";
+import { useState, useMemo } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  AreaChart,
+  Area,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
+import backgroundImage from "../assets/background.png";
+import "../styles/progress.css";
 
-export default function Progress() {
-  const navigate = useNavigate();
-  const [health, setHealth] = useState(null);
-  const [error, setError] = useState("");
+const Progress = () => {
+  const [selectedYear, setSelectedYear] = useState(2026);
 
-  useEffect(() => {
-    let cancelled = false;
+  const colors = ["#563263", "#b23e53", "#f14c55", "#fe6345", "#fc7b49"];
 
-    fetchHealth()
-      .then((data) => {
-        if (!cancelled) setHealth(data);
-      })
-      .catch(() => {
-        if (!cancelled)
-          setError("Backend is offline. Start the API server to track progress.");
+  /* Daily Contributions Heatmap Data */
+  const dailyContributions = useMemo(() => {
+    const data = [];
+    const months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"];
+    const days = ["Mon", "Wed", "Fri"];
+    
+    // Generate random contribution counts
+    months.forEach((month, idx) => {
+      days.forEach((day) => {
+        data.push({
+          month,
+          day,
+          count: Math.floor(Math.random() * 5),
+        });
       });
-
-    return () => {
-      cancelled = true;
-    };
+    });
+    return data;
   }, []);
 
+  const learningSpeed = [
+    { day: "Mon", speed: 2.5 },
+    { day: "Tue", speed: 3.8 },
+    { day: "Wed", speed: 3.1 },
+    { day: "Thu", speed: 6.2 },
+    { day: "Fri", speed: 5.8 },
+  ];
+
+  const lessonsCompleted = [
+    { project: "Problem 1", progress: 100, color: "#563263" },
+    { project: "Problem 2", progress: 85, color: "#b23e53" },
+    { project: "Problem 3", progress: 70, color: "#f14c55" },
+    { project: "Problem 4", progress: 65, color: "#fe6345" },
+    { project: "Problem 5", progress: 55, color: "#fc7b49" },
+    { project: "Problem 6", progress: 90, color: "#563263" },
+    { project: "Problem 7", progress: 75, color: "#b23e53" },
+    { project: "Problem 8", progress: 80, color: "#f14c55" },
+    { project: "Problem 9", progress: 60, color: "#fe6345" },
+    { project: "Problem 10", progress: 95, color: "#fc7b49" },
+  ];
+
   return (
-    <div className="home">
-      <div className="overlay"></div>
+    <div
+      className="progress-container"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+      <div className="progress-overlay"></div>
 
-      <div className="top-controls">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <div className="progress-content">
+        {/* Daily Contributions */}
+        <div className="progress-section daily-contributions">
+          <h2>daily contributions</h2>
+          <div className="contrib-header">
+            <span className="contrib-summary">7 contributions in the last year</span>
+            <div className="year-selector">
+              {[2026, 2025, 2024].map((year) => (
+                <button
+                  key={year}
+                  className={`year-btn ${selectedYear === year ? "active" : ""}`}
+                  onClick={() => setSelectedYear(year)}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+          </div>
 
-      <h1 className="logo">COUTOR</h1>
+          <div className="contrib-grid">
+            <div className="contrib-header-grid">
+              {["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"].map((m) => (
+                <div key={m} className="month-label">{m}</div>
+              ))}
+            </div>
+            <div className="contrib-rows">
+              {["Mon", "Wed", "Fri"].map((day) => (
+                <div key={day} className="contrib-row">
+                  <span className="day-label">{day}</span>
+                  {["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"].map((month, idx) => (
+                    <div
+                      key={`${day}-${month}`}
+                      className="contrib-cell"
+                      style={{
+                        backgroundColor: colors[Math.floor(Math.random() * 5)],
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
 
-      <button
-        onClick={() => navigate("/")}
-        style={{
-          position: "absolute",
-          top: "20px",
-          left: "20px",
-          padding: "8px 16px",
-          background: "#d9d9d9",
-          border: "1px solid #999",
-          borderRadius: "20px",
-          cursor: "pointer",
-          fontSize: "16px",
-          fontFamily: "Koulen, sans-serif",
-          zIndex: 100,
-        }}
-      >
-        ← BACK
-      </button>
+          <div className="contrib-legend">
+            <span>Learn how we count contributions</span>
+            <div className="legend-scale">
+              <span>Less</span>
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div key={i} className="legend-cell" style={{ backgroundColor: colors[i] }}></div>
+              ))}
+              <span>More</span>
+            </div>
+          </div>
+        </div>
 
-      <h2 style={{ color: "white", marginTop: "50px" }}>
-        PROGRESS
-      </h2>
+        {/* Charts Section */}
+        <div className="charts-wrapper">
+          {/* Learning Speed */}
+          <div className="progress-section learning-speed">
+            <h2>learning speed</h2>
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={learningSpeed}>
+                <defs>
+                  <linearGradient id="colorSpeed" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#563263" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#563263" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                <XAxis dataKey="day" stroke="#999" />
+                <YAxis stroke="#999" domain={[0, 8]} />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="speed"
+                  stroke="#563263"
+                  fillOpacity={1}
+                  fill="url(#colorSpeed)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
 
-      <div style={{ color: "white", marginTop: "20px" }}>
-        {health && (
-          <>
-            <p>Status: {health.status}</p>
-            <p>Engine: {health.engine}</p>
-          </>
-        )}
-
-        {error && <p style={{ color: "salmon" }}>{error}</p>}
-
-        {!health && !error && <p>Checking backend status...</p>}
+          {/* Lessons Completed */}
+          <div className="progress-section lessons-completed">
+            <h2>lessons completed</h2>
+            <div className="lessons-chart">
+              <div className="lessons-header">
+                {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+                  <span key={i} className="lesson-day">{d}</span>
+                ))}
+              </div>
+              {lessonsCompleted.map((lesson, idx) => (
+                <div key={idx} className="lesson-row">
+                  <span className="lesson-name">{lesson.project}</span>
+                  <div className="lesson-bar" style={{ backgroundColor: lesson.color, width: `${lesson.progress}%` }}>
+                    <span className="lesson-label">Lorem ipsum dolor sit amet</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Progress;

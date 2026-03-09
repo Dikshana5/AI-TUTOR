@@ -101,3 +101,19 @@ export async function login(credentials) {
 
   return res.json();
 }
+
+export async function sendChatMessage(messagesOrText) {
+  const payload = typeof messagesOrText === "string" ? { message: messagesOrText } : { messages: messagesOrText };
+  const res = await fetch(`${API_BASE_URL}/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Chat failed with status ${res.status}`);
+  }
+
+  return res.json();
+}
