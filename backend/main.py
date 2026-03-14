@@ -28,17 +28,7 @@ except Exception:
     MODEL_ID = None
 
 
-@app.on_event("startup")
-def startup_event():
-    try:
-        initialize_ai()
-        print("AI engine initialized")
-    except Exception as e:
-        print("AI initialization skipped:", e)
 
-@app.get("/")
-def root():
-    return {"message": "AI Programming Tutor API running"}
 
 app = FastAPI(title="AI Programming Tutor - Master API")
 
@@ -50,6 +40,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_event():
+    try:
+        initialize_ai()
+        print("AI engine initialized")
+    except Exception as e:
+        print("AI initialization skipped:", e)
+
+@app.get("/")
+def root():
+    return {"message": "AI Programming Tutor API running"}
 
 @app.get("/health")
 def health():
