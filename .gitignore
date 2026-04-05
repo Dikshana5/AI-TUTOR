@@ -1,20 +1,48 @@
-# Python
-.venv/
-__pycache__/
-*.pyc
-.env
-
-# Node
+# Prerequisites
 node_modules/
+.venv/
+env/
+venv/
+ENV/
+bin/
+lib/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environment Variables (CRITICAL)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
 dist/
 build/
+.next/
+out/
+backend/sql_app.db
 
-# Logs
-*.log
-
-# OS files
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
-Thumbs.db
 
-# Zip files
-*.zip
+# Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.eslintcache
