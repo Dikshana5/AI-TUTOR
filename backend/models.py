@@ -72,7 +72,7 @@ class UserLogin(BaseModel):
     password: str
 
 class User(UserBase):
-    id: int
+    id: str | int
     is_active: bool
 
     class Config:

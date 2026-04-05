@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
@@ -10,6 +11,13 @@ import BottomNav from "./pages/BottomNav";
 
 
 export default function App() {
+  useEffect(() => {
+    const testUserId = "13669de4-fde2-4905-9429-22c7badcda57";
+    localStorage.clear();
+    localStorage.setItem("user_id", testUserId);
+    console.log("Cleared localStorage and set temporary user_id for backend mapping test:", testUserId);
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

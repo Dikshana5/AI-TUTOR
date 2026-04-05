@@ -41,14 +41,27 @@ export default function Account() {
         });
         localStorage.setItem("token", res.access_token);
         localStorage.setItem("user", JSON.stringify({ username: formData.username }));
+
+        const userId = res?.user?.id || res?.id;
+        if (userId) {
+          localStorage.setItem("user_id", userId);
+          console.log("Stored authenticated user_id:", userId);
+        } else {
+          console.warn("Login succeeded but response did not include user.id");
+        }
+
         setLoggedUser({ username: formData.username });
         setSuccess("Login successful!");
       } else {
-        await signup({
+        const res = await signup({
           username: formData.username,
           email: formData.email,
           password: formData.password,
         });
+        const userId = res?.user?.id || res?.id;
+        if (userId) {
+          localStorage.setItem("user_id", userId);
+        }
         setSuccess("Signup successful! You can now login.");
         setIsLogin(true);
       }

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+
 import {
   BarChart,
   Bar,
@@ -11,61 +12,102 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import backgroundImage from "../assets/background.png";
+import { fetchStats } from "../api";
 import "../styles/progress.css";
 
-const Progress = () => {
-  const [selectedYear, setSelectedYear] = useState(2026);
 
+
+const Progress = () => {
+  const [stats, setStats] = useState({ 
+    heatmap: [], 
+    learning_speed: [], 
+    lessons_completed: [] 
+  });
+  const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+  // 1. Get the actual user ID from login or test setup
+  const userId = localStorage.getItem("user_id");
+  console.log("Progress fetch using user_id:", userId);
+  if (!userId) {
+    console.warn("No user_id found in localStorage, skipping stats fetch.");
+    setLoading(false);
+    return;
+  }
+
+  // 2. Start loading
+  setLoading(true);
+
+  // 3. Fetch from your FastAPI backend
+  fetchStats(userId)
+    .then(data => {
+      console.log("Progress 200 response:", data);
+      const cleanData = data?.stats || data?.data || data;
+      console.log("Resolved stats payload:", cleanData);
+
+      const isValidObject = cleanData && typeof cleanData === "object";
+      const hasRequiredKeys = isValidObject && ["heatmap", "learning_speed", "lessons_completed"].every((key) => key in cleanData);
+
+      if (!isValidObject || !hasRequiredKeys) {
+        console.warn("Malformed stats response, using fallback stats.");
+        setStats({ heatmap: [], learning_speed: [], lessons_completed: [] });
+        return;
+      }
+
+      setStats({
+        heatmap: Array.isArray(cleanData.heatmap) ? cleanData.heatmap : [],
+        learning_speed: Array.isArray(cleanData.learning_speed) ? cleanData.learning_speed : [],
+        lessons_completed: Array.isArray(cleanData.lessons_completed)
+          ? cleanData.lessons_completed
+          : typeof cleanData.lessons_completed === "number"
+          ? cleanData.lessons_completed
+          : [],
+      });
+    })
+    .catch(err => {
+      console.error("Stats error:", err);
+      setStats({ heatmap: [], learning_speed: [], lessons_completed: [] });
+    })
+    .finally(() => {
+      // 5. CRITICAL: This removes the "Loading progress..." screen
+      setLoading(false);
+    });
+}, []);
+
+
+
+  // ✅ FIXED: Removed stray [] and used fallbacks
+  const dailyContributions = stats?.heatmap || [];
+  const learningSpeed = stats?.learning_speed || [];
+  const lessonsCompleted = stats?.lessons_completed || [];
+  const lessonItems = Array.isArray(stats?.lessons_completed)
+    ? stats.lessons_completed
+    : typeof stats?.lessons_completed === "number"
+    ? Array.from({ length: stats.lessons_completed })
+    : [];
+
+  const [selectedYear, setSelectedYear] = useState(2026);
   const colors = ["#563263", "#b23e53", "#f14c55", "#fe6345", "#fc7b49"];
 
-  /* Daily Contributions Heatmap Data */
-  const dailyContributions = useMemo(() => {
-    const data = [];
-    const months = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"];
-    const days = ["Mon", "Wed", "Fri"];
-    
-    // Generate random contribution counts
-    months.forEach((month, idx) => {
-      days.forEach((day) => {
-        data.push({
-          month,
-          day,
-          count: Math.floor(Math.random() * 5),
-        });
-      });
-    });
-    return data;
-  }, []);
+  if (!stats) return <p>Loading...</p>;
 
-  const learningSpeed = [
-    { day: "Mon", speed: 2.5 },
-    { day: "Tue", speed: 3.8 },
-    { day: "Wed", speed: 3.1 },
-    { day: "Thu", speed: 6.2 },
-    { day: "Fri", speed: 5.8 },
-  ];
-
-  const lessonsCompleted = [
-    { project: "Problem 1", progress: 100, color: "#563263" },
-    { project: "Problem 2", progress: 85, color: "#b23e53" },
-    { project: "Problem 3", progress: 70, color: "#f14c55" },
-    { project: "Problem 4", progress: 65, color: "#fe6345" },
-    { project: "Problem 5", progress: 55, color: "#fc7b49" },
-    { project: "Problem 6", progress: 90, color: "#563263" },
-    { project: "Problem 7", progress: 75, color: "#b23e53" },
-    { project: "Problem 8", progress: 80, color: "#f14c55" },
-    { project: "Problem 9", progress: 60, color: "#fe6345" },
-    { project: "Problem 10", progress: 95, color: "#fc7b49" },
-  ];
+  if (loading) {
+    return (
+      <div className="progress-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="progress-overlay"></div>
+        <div className="progress-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <p style={{ color: 'white', fontSize: '24px' }}>Loading progress...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="progress-container"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
-      <div className="progress-overlay"></div>
-
-      <div className="progress-content">
+    <>
+      <div className="progress-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="progress-overlay"></div>
+        <div className="progress-content">
+        
         {/* Daily Contributions */}
         <div className="progress-section daily-contributions">
           <h2>daily contributions</h2>
@@ -83,46 +125,23 @@ const Progress = () => {
               ))}
             </div>
           </div>
-
           <div className="contrib-grid">
-            <div className="contrib-header-grid">
-              {["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"].map((m) => (
-                <div key={m} className="month-label">{m}</div>
-              ))}
-            </div>
             <div className="contrib-rows">
-              {["Mon", "Wed", "Fri"].map((day) => (
-                <div key={day} className="contrib-row">
-                  <span className="day-label">{day}</span>
-                  {["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"].map((month, idx) => (
-                    <div
-                      key={`${day}-${month}`}
-                      className="contrib-cell"
-                      style={{
-                        backgroundColor: colors[Math.floor(Math.random() * 5)],
-                      }}
-                    ></div>
-                  ))}
+              {(stats?.heatmap || []).map((entry, idx) => (
+                <div key={idx} className="contrib-row">
+                  <span className="day-label">{entry?.month} {entry?.day}</span>
+                  <div
+                    className="contrib-cell"
+                    style={{ backgroundColor: colors[Math.min(entry?.count || 0, 4)] }}
+                  ></div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          <div className="contrib-legend">
-            <span>Learn how we count contributions</span>
-            <div className="legend-scale">
-              <span>Less</span>
-              {[0, 1, 2, 3, 4].map((i) => (
-                <div key={i} className="legend-cell" style={{ backgroundColor: colors[i] }}></div>
-              ))}
-              <span>More</span>
             </div>
           </div>
         </div>
 
         {/* Charts Section */}
         <div className="charts-wrapper">
-          {/* Learning Speed */}
           <div className="progress-section learning-speed">
             <h2>learning speed</h2>
             <ResponsiveContainer width="100%" height={250}>
@@ -135,41 +154,36 @@ const Progress = () => {
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                 <XAxis dataKey="day" stroke="#999" />
-                <YAxis stroke="#999" domain={[0, 8]} />
+                <YAxis stroke="#999" />
                 <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="speed"
-                  stroke="#563263"
-                  fillOpacity={1}
-                  fill="url(#colorSpeed)"
-                />
+                <Area type="monotone" dataKey="speed" stroke="#563263" fill="url(#colorSpeed)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Lessons Completed */}
           <div className="progress-section lessons-completed">
             <h2>lessons completed</h2>
             <div className="lessons-chart">
               <div className="lessons-header">
-                {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                  <span key={i} className="lesson-day">{d}</span>
+                {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
+                  <span key={i} className="lesson-day">{day}</span>
                 ))}
               </div>
-              {lessonsCompleted.map((lesson, idx) => (
-                <div key={idx} className="lesson-row">
-                  <span className="lesson-name">{lesson.project}</span>
-                  <div className="lesson-bar" style={{ backgroundColor: lesson.color, width: `${lesson.progress}%` }}>
-                    <span className="lesson-label">Lorem ipsum dolor sit amet</span>
+              {lessonItems.map((lesson, idx) => (
+                <div key={lesson?.id || idx} className="lesson-row">
+                  <span className="lesson-name">{lesson?.project || `Lesson ${idx + 1}`}</span>
+                  <div className="lesson-bar" style={{ backgroundColor: lesson?.color || "#563263", width: `${lesson?.progress || 0}%` }}>
+                    <span className="lesson-label">{lesson?.label || "Project Progress"}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
+
       </div>
     </div>
+  </>
   );
 };
 

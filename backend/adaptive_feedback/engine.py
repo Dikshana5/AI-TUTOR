@@ -1,9 +1,10 @@
 import os
-import json
-import pickle
-import faiss
-from typing import Dict, Any
-from sentence_transformers import SentenceTransformer
+from datetime import datetime, timezone
+from typing import Dict, Any, List, Optional, Tuple
+
+from dotenv import load_dotenv
+from supabase import create_client, Client
+
 from groq_client import generate_problem_with_groq
 
 # Shared models
@@ -12,81 +13,151 @@ from models import DetectResponse, SemanticMatch
 # Import your AI logic
 from adaptive_feedback.detector import run_detection, initialize_ai
 
-# --- 1. CONFIGURATION & PATHS ---
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Adjusted to look inside the feedengine folder correctly
-PROBLEMS_PATH = os.path.join(os.path.dirname(__file__), "feedengine", "problems.json")
-INDEX_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "vector_index"))
 
-# --- 2. CORE FUNCTIONS ---
-def refresh_vector_brain():
-    """Updates the FAISS brain by indexing both Problems and Misconceptions."""
-    
-    # 1. Define Paths (Ensuring they match your generator)
-    MISCONCEPTIONS_PATH = os.path.join(BASE_DIR, "feedengine", "misconceptions.json")
-    # PROBLEMS_PATH is already defined in your global scope
-    
-    combined_data = []
-    text_to_embed = []
+load_dotenv()
 
-    # 2. Load and Format Problems
-    if os.path.exists(PROBLEMS_PATH):
-        with open(PROBLEMS_PATH, "r") as f:
-            problems = json.load(f)
-            # Ensure it's a list
-            prob_list = problems if isinstance(problems, list) else problems.get("problems", [])
-            for p in prob_list:
-                # Type flag helps the detector know what it found later
-                p["data_type"] = "problem" 
-                combined_data.append(p)
-                text_to_embed.append(f"Problem ({p.get('language', 'Python')}): {p.get('title', '')} - {p.get('description', '')}")
+SUPABASE: Optional[Client] = None
 
-    # 3. Load and Format Misconceptions
-    if os.path.exists(MISCONCEPTIONS_PATH):
-        with open(MISCONCEPTIONS_PATH, "r") as f:
-            miscs = json.load(f)
-            # Ensure it's a list
-            misc_list = miscs if isinstance(miscs, list) else miscs.get("misconceptions", [])
-            for m in misc_list:
-                m["data_type"] = "misconception"
-                combined_data.append(m)
-                text_to_embed.append(f"Misconception ({m.get('language', 'Python')}): {m.get('title', '')} - {m.get('description', '')}")
 
-    if not combined_data:
-        print("❌ Error: No data found to index.")
-        return
+def _normalize_language(language: str) -> str:
+    l = (language or "").strip().lower()
+    if l in {"cpp", "c++"}:
+        return "c++"
+    return l
 
-    # 4. Create Embeddings
-    print(f"🧠 Encoding {len(combined_data)} items (Problems + Misconceptions)...")
-    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-    embeddings = model.encode(text_to_embed).astype('float32')
-    faiss.normalize_L2(embeddings)
 
-    # 5. Build and Save FAISS Index
-    dimension = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dimension)
-    index.add(embeddings)
+def _get_supabase_client() -> Client:
+    """
+    Lazily initialize and return a Supabase client.
+    """
+    global SUPABASE
+    if SUPABASE is not None:
+        return SUPABASE
 
-    os.makedirs(INDEX_DIR, exist_ok=True)
-    faiss.write_index(index, os.path.join(INDEX_DIR, 'misconceptions_faiss.bin'))
-    
-    # Save the combined metadata so we can retrieve details by index ID
-    with open(os.path.join(INDEX_DIR, 'misconceptions_data.pkl'), 'wb') as f:
-        pickle.dump(combined_data, f)
-    
-    print(f"✅ FAISS Brain Rebuilt! Total items indexed: {len(combined_data)}")
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_KEY")
+    if not url or not key:
+        raise RuntimeError("SUPABASE_URL and SUPABASE_KEY must be set in the environment")
 
-def load_problems():
+    SUPABASE = create_client(url, key)
+    return SUPABASE
+
+
+def get_all_problems() -> List[Dict[str, Any]]:
+    """
+    Fetch all problems from the Supabase 'problems' table.
+    """
+    client = _get_supabase_client()
+    resp = client.table("problems").select("*").execute()
+    return getattr(resp, "data", []) or []
+
+def get_curriculum_problems() -> List[Dict[str, Any]]:
+    """Fetch structured problems from the 'learning_path' table."""
     try:
-        with open(PROBLEMS_PATH, "r") as f:
-            data = json.load(f)
-            # Handle both list format and {"problems": [...]} format
-            return data if isinstance(data, list) else data.get("problems", [])
-    except (FileNotFoundError, json.JSONDecodeError):
+        client = _get_supabase_client()
+        resp = client.table("learning_path").select("*").execute()
+        return getattr(resp, "data", []) or []
+    except Exception:
         return []
 
-# Load problems once when engine starts
-PROBLEMS_DB = load_problems()
+def get_categories(language: str, source: str = "problems") -> List[str]:
+    language_norm = _normalize_language(language)
+    if not language_norm:
+        return []
+
+    # Choose table based on source
+    problems_db = get_curriculum_problems() if source == "learning" else get_all_problems()
+    
+    topics = set()
+    for p in problems_db:
+        p_lang = str(p.get("language", "")).lower()
+        if language_norm in p_lang:
+            topic = str(p.get("topic", "")).strip()
+            if topic:
+                topics.add(topic)
+    return sorted(topics)
+
+
+def save_user_activity(
+    user_id: str,
+    session_id: str,
+    language: str,
+    content: str,
+    result: Dict[str, Any],
+) -> None:
+    """
+    Persist each analysis run into the Supabase `user_activities` table.
+
+    Assumptions (adjust column names if your schema differs):
+      - user_id (text)
+      - session_id (text)
+      - language (text)
+      - content (text)
+      - result (json/jsonb)
+    """
+    client = _get_supabase_client()
+
+    row = {
+        "user_id": user_id,
+        "session_id": session_id,
+        "language": language,
+        "content": content,
+        "result": result,
+    }
+
+    # Don’t hard-fail the entire request if persistence fails; the caller may decide.
+    client.table("user_activities").insert(row).execute()
+
+
+def get_user_stats(user_id: str) -> Dict[str, Any]:
+    client = _get_supabase_client()
+    try:
+        # Fetch only timestamps for this specific user activity
+        resp = client.table("user_activities").select("created_at").eq("user_id", user_id).execute()
+        rows = getattr(resp, "data", []) or []
+    except Exception as exc:
+        print(f"Error fetching stats: {exc}")
+        rows = []
+
+    # Initialize grouped data
+    counts: Dict[str, int] = {}
+    speed_data: Dict[str, List[float]] = {}
+
+    for row in rows:
+        dt = parse_dt(row.get("created_at"))
+        if not dt:
+            continue
+
+        # Group by actual calendar date
+        date_key = dt.strftime("%Y-%m-%d")
+        counts[date_key] = counts.get(date_key, 0) + 1
+
+        # For Learning Speed, use a placeholder when only created_at is selected
+        weekday = dt.strftime("%a")
+        if weekday not in speed_data:
+            speed_data[weekday] = []
+        speed_data[weekday].append(0.5)
+
+    # Convert grouped date counts to heatmap-compatible month/day buckets
+    months_list = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"]
+    days_list = ["Mon", "Wed", "Fri"]
+    heatmap_counts: Dict[Tuple[str, str], int] = {}
+    for date_key, count in counts.items():
+        dt = parse_dt(date_key)
+        if not dt:
+            continue
+        month, day = dt.strftime("%b"), dt.strftime("%a")
+        heatmap_counts[(month, day)] = heatmap_counts.get((month, day), 0) + count
+
+    heatmap = [{"month": m, "day": d, "count": heatmap_counts.get((m, d), 0)} for m in months_list for d in days_list]
+
+    learning_speed = [{"day": d, "speed": round(sum(v) / len(v), 2)} for d, v in speed_data.items()]
+
+    return {
+        "heatmap": heatmap,
+        "learning_speed": learning_speed or [{"day": "Mon", "speed": 0}],
+        "lessons_completed": []
+    }
 
 
 def analyze_student_submission(content: str, language: str = "python") -> DetectResponse:
@@ -98,55 +169,59 @@ def analyze_student_submission(content: str, language: str = "python") -> Detect
     return DetectResponse(**ai_result)
 
 
-def get_next_step(analysis: DetectResponse, current_lang: str = "python") -> Dict[str, Any]:
+def get_next_step(analysis: DetectResponse, current_lang: str, current_problem_id: str) -> Dict[str, Any]:
     """
-    The Adaptive Logic: Filters by language, then adjusts difficulty.
+    Adaptive Logic for College Demo:
+    - Score < 0.7: Give the very next problem in the SAME topic.
+    - Score >= 0.7: Jump to the first problem of the NEXT topic.
     """
+    mastery_score = float(analysis.confidence or 0.0)
+    client = _get_supabase_client()
 
-    # 1. Filter by language first
-    lang_problems = [
-        p for p in PROBLEMS_DB
-        if current_lang.lower() in p.get("language", "").lower()
-    ]
+    # 1. Get the current problem's details (Topic and Order)
+    current_res = client.table("learning_path").select("*").eq("id", current_problem_id).single().execute()
+    current_prob = current_res.data
+    
+    if not current_prob:
+        return {"error": "Current problem not found"}
 
-    # 2. Determine target difficulty
-    if any(err in str(analysis.error_types).lower() for err in ["syntax", "indentation"]):
-        target_diff = "easy"
-    elif any(err in str(analysis.error_types).lower() for err in ["logic", "conceptual"]):
-        target_diff = "medium"
+    current_topic = current_prob.get("topic")
+    current_order = current_prob.get("order_index")
+
+    # 2. Decide the "Search Criteria" based on mastery
+    if mastery_score < 0.7:
+        # STRUGGLING: Find the next problem in the same topic
+        # (e.g., if they were on prob 1, give them prob 2 of 'Basics')
+        next_res = client.table("learning_path") \
+            .select("*") \
+            .eq("language", current_lang) \
+            .eq("topic", current_topic) \
+            .gt("order_index", current_order) \
+            .order("order_index") \
+            .limit(1) \
+            .execute()
     else:
-        target_diff = "hard"
+        # MASTERED: Jump to the first problem of a DIFFERENT topic
+        next_res = client.table("learning_path") \
+            .select("*") \
+            .eq("language", current_lang) \
+            .neq("topic", current_topic) \
+            .order("topic") \
+            .order("order_index") \
+            .limit(1) \
+            .execute()
 
-    # 3. Try to find a match in the same concept + same difficulty
-    candidates = [
-        p for p in lang_problems
-        if p.get("difficulty", "").lower() == target_diff
-    ]
-
-    # Concept matching (fuzzy)
-    concept = (analysis.primary_concept or "").lower()
-    concept_matches = [
-        p for p in candidates
-        if concept in p.get("title", "").lower()
-        or concept in p.get("topic", "").lower()
-    ]
-
-    # 4. Final selection with safe fallbacks
-    if concept_matches:
-        return concept_matches[0]
-
-    if candidates:
-        return candidates[0]
-
-    if lang_problems:
-        return lang_problems[0]
-
-    # 5. LAST RESORT — JIT generation via Groq
-    return generate_problem_with_groq(
-        concept=analysis.primary_concept or "Programming Basics",
-        difficulty=target_diff,
-        language=current_lang
-    )
+    # 3. Return the new problem or a fallback if they finished everything
+    if next_res.data:
+        return next_res.data[0]
+    else:
+        # Fallback: If no "next" exists, just give them the next global problem
+        fallback = client.table("learning_path") \
+            .select("*") \
+            .eq("language", current_lang) \
+            .gt("order_index", current_order) \
+            .limit(1).execute()
+        return fallback.data[0] if fallback.data else current_prob
 
 
 
