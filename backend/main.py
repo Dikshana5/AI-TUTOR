@@ -236,7 +236,13 @@ def login(user_credentials: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
     access_token = create_access_token(data={"sub": user.get("username")})
-    return {"access_token": access_token, "token_type": "bearer"}
+    user_id = user.get("id")
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "id": user_id,
+        "user": {"id": user_id, "username": user.get("username"), "email": user.get("email")}
+    }
 
 
 @app.post("/chat")

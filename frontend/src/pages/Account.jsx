@@ -66,7 +66,8 @@ export default function Account() {
         setIsLogin(true);
       }
     } catch (err) {
-      setError(err.message);
+      const errorMsg = err?.message || err?.detail || JSON.stringify(err) || "An error occurred";
+      setError(typeof errorMsg === "string" ? errorMsg : "An error occurred");
     }
   };
 

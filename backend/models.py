@@ -46,7 +46,7 @@ class UserCreate(UserBase):
     password: str
 
 class UserLogin(BaseModel):
-    email: EmailStr # Changed to email as Supabase Auth primarily uses Email
+    username: str
     password: str
 
 class UserProfile(UserBase):
@@ -56,9 +56,18 @@ class UserProfile(UserBase):
     class Config:
         from_attributes = True
 
+class User(UserBase):
+    id: str
+    is_active: bool = True
+
+    class Config:
+        from_attributes = True
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+    id: Optional[str] = None
+    user: Optional[Dict[str, Any]] = None
 
 class TokenData(BaseModel):
     email: Optional[str] = None
